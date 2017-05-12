@@ -1,8 +1,10 @@
-export {Provider as StyleProvider, ThemeProvider} from 'react-fela'
 import {createRenderer} from 'fela'
 import {connect} from 'react-fela'
 import lvha from 'fela-plugin-lvha'
 import prefixPlugin from './prefixPlugin'
+
+export {Provider as StyleProvider, ThemeProvider} from 'react-fela'
+export * as traits from './traits'
 
 const {keys} = Object
 

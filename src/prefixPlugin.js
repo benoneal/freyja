@@ -25,7 +25,6 @@ const jsPrefix = (() => {
   if (typeof navigator === 'undefined') return ''
   const ua = navigator.userAgent || navigator.vendor || (isBrowser && window.opera)
   const match = /(opera|msie|firefox|chrome|safari|fban|fbav|node)/.exec(ua.toLowerCase())
-  if (!match) console.warn('CXSync: No vendor match found: This browser is not officially supported and vendor prefixes will be absent.')
   return match ? VENDORS[match[0]] : ''
 })()
 
