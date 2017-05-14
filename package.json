@@ -1,6 +1,6 @@
 {
   "name": "freyja",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Pass styles as props to components. Powered by Fela.",
   "repository": "https://github.com/benoneal/freyja",
   "main": "dist/index.js",
@@ -11,7 +11,9 @@
     "test": "standard && mocha"
   },
   "keywords": [
-    "i18n",
+    "styles",
+    "css",
+    "fela",
     "react",
     "translation"
   ],
@@ -31,10 +33,10 @@
     "standard": "^7.1.2"
   },
   "dependencies": {
-    "fela": "^4.3.5",
-    "fela-plugin-lvha": "^4.3.5",
+    "fela": "4.2.6",
+    "fela-plugin-lvha": "4.2.6",
     "lodash": "^4.17.4",
-    "react-fela": "4.3.3"
+    "react-fela": "4.2.6"
   },
   "standard": {
     "parser": "babel-eslint"
