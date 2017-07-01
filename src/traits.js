@@ -3,7 +3,7 @@ const {keys} = Object
 // Dimension helpers
 const rhythm = [0.25, 0.5, 0.6, 0.7, 0.85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20]
 
-export const scale = (i = 0) => `${rhythm[i + 5]}rem`
+export const scale = (i = 0, unit = 'rem') => `${rhythm[i + 5]}${unit}`
 
 export const media = {
   ebook: '@media screen and (min-width: 420px)',

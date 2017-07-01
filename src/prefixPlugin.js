@@ -1,4 +1,11 @@
-import memoize from 'lodash/memoize'
+import moize from 'moize'
+
+const m = moize({
+  serialize: true,
+  maxSize: 1000,
+  maxArgs: 2,
+  maxAge: 1000 * 60 * 15
+})
 
 const {isArray} = Array
 
@@ -30,7 +37,7 @@ const jsPrefix = (() => {
 
 export const cssPrefix = `-${jsPrefix.toLowerCase()}-`
 
-export const prefixProperty = memoize((property, prefix = jsPrefix) => {
+export const prefixProperty = m((property, prefix = jsPrefix) => {
   const prefixed = prefix + property.slice(0, 1).toUpperCase() + property.slice(1)
 
   if (property === 'justifyContent' && prefix === 'ms') {
@@ -47,8 +54,7 @@ export const prefixProperty = memoize((property, prefix = jsPrefix) => {
   }
 })
 
-const memoizeCacheKey = (...args) => (JSON.stringify(args))
-export const prefixValue = memoize((property, value) => {
+export const prefixValue = m((property, value) => {
   if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value
   if (property === 'content' && !value.length) value = '""'
 
@@ -76,9 +82,9 @@ export const prefixValue = memoize((property, value) => {
   } else {
     return value
   }
-}, memoizeCacheKey)
+})
 
-const addVendorPrefixes = memoize((style) => {
+const addVendorPrefixes = m((style) => {
   const prefixedStyle = {}
 
   for (const property in style) {
@@ -92,7 +98,7 @@ const addVendorPrefixes = memoize((style) => {
   }
 
   return prefixedStyle
-}, memoizeCacheKey)
+})
 
 export default addVendorPrefixes
 
