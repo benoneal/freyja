@@ -66,37 +66,37 @@ export const gradient = keys(directions).reduce((acc, direction) => ({
 
 // Pseudo-element helpers
 export const placeholder = (style) => (
-  [
-    '::-webkit-input-placeholder',
-    ':-moz-placeholder',
-    '::-moz-placeholder',
-    ':-ms-input-placeholder'
-  ].reduce((acc, selector) => ({
-    ...acc,
-    [selector]: style
-  }), {})
+[
+  '::-webkit-input-placeholder',
+  ':-moz-placeholder',
+  '::-moz-placeholder',
+  ':-ms-input-placeholder'
+].reduce((acc, selector) => ({
+  ...acc,
+  [selector]: style
+}), {})
 )
 
 export const rangeThumb = (style) => (
-  [
-    '::-webkit-slider-thumb', 
-    '::-moz-range-thumb', 
-    '::-ms-thumb'
-  ].reduce((acc, selector) => ({
-    ...acc,
-    [selector]: style
-  }), {})
+[
+  '::-webkit-slider-thumb',
+  '::-moz-range-thumb',
+  '::-ms-thumb'
+].reduce((acc, selector) => ({
+  ...acc,
+  [selector]: style
+}), {})
 )
 
 export const rangeTrack = (style) => (
-  [
-    '::-webkit-slider-runnable-track', 
-    '::-moz-range-track', 
-    '::-ms-track'
-  ].reduce((acc, selector) => ({
-    ...acc,
-    [selector]: style
-  }), {})
+[
+  '::-webkit-slider-runnable-track',
+  '::-moz-range-track',
+  '::-ms-track'
+].reduce((acc, selector) => ({
+  ...acc,
+  [selector]: style
+}), {})
 )
 
 // Flex helpers
@@ -150,7 +150,7 @@ export const transition = keys(ease).reduce((acc, easing) => ({
     slow: {transition: `all 480ms ${ease[easing]}`}
   }
 }), {
-  fast: {transition: `all 200ms ease-in-out`},
-  medium: {transition: `all 320ms ease-in-out`},
-  slow: {transition: `all 480ms ease-in-out`}
+  fast: {transition: 'all 200ms ease-in-out'},
+  medium: {transition: 'all 320ms ease-in-out'},
+  slow: {transition: 'all 480ms ease-in-out'}
 })

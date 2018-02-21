@@ -1,23 +1,14 @@
-import React from 'react'
-import {lifecycle} from 'recompose'
-import {createRenderer} from 'fela'
-import {render} from 'fela-dom'
-import lvha from 'fela-plugin-lvha'
+import {compose, mapProps} from 'recompose'
+import {css, keyframes} from 'emotion'
 import moize from 'moize'
-import {withTheme, ThemeProvider as Provider} from 'theming'
-import prefixPlugin from './prefixPlugin'
+import {createTheming} from 'theming'
 
-export * as traits from './traits'
+const CHANNEL = '__FREYJA__'
 
-const {keys} = Object
-const CHANNEL = 'freyjaTheme'
+const {withTheme, ...theme} = createTheming(CHANNEL)
 
-const mediaQueryOrder = [
-  '(min-width: 420px)',
-  '(min-width: 580px)',
-  '(min-width: 740px)',
-  '(min-width: 980px)'
-]
+export const ThemeProvider = theme.ThemeProvider
+export const animation = keyframes
 
 const m = moize({
   serialize: true,
@@ -26,30 +17,17 @@ const m = moize({
   maxAge: 1000 * 60 * 15
 })
 
-export const renderer = createRenderer({
-  plugins: [lvha(), prefixPlugin],
-  mediaQueryOrder
-})
-
-const renderOnMount = lifecycle({
-  componentDidMount() {
-    render(renderer, this.props.mountNode)
-  }
-})
-
-export const ThemeProvider = renderOnMount(Provider)
-
-const pipeReducer = (res, fn) => typeof fn === 'function' ? fn(res) : res
-const pipe = (...fns) => (props) => fns.reduce(pipeReducer, props)
-const renderRule = m((rule) => renderer.renderRule(() => rule))
+const {keys} = Object
+const renderClassName = m(css)
 const renderStyles = (styleHash) => keys(styleHash).reduce((acc, key) => ({
   ...acc,
-  [key]: renderRule(styleHash[key])
+  [key]: renderClassName(styleHash[key])
 }), {})
 
-export default (styles, mapPropsToStyles) => {
-  const render = pipe(mapPropsToStyles, styles, renderStyles)
-  return (Component) => withTheme(({...props, theme}) => 
-    <Component {...props} styles={render({...props, theme})} />
-  )
-}
+export default (styles) => compose(
+  withTheme,
+  mapProps(({theme, ...props}) => ({
+    ...props,
+    styles: renderStyles(styles({...props, theme}))
+  }))
+)
