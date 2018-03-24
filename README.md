@@ -101,3 +101,5 @@ const renderMiddleware = (req, res) => {
   `)
 }
 ```
+
+If rendering your server-side HTML with React/JSX (instead of a string, like above), use `import dehydrateCSS from 'freyja/ssrReact'`.
