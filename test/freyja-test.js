@@ -3,7 +3,9 @@ import {renderToString} from 'react-dom/server'
 import {describe, it} from 'mocha'
 import assert from 'assert'
 import withStyles, {ThemeProvider} from '../src'
-import dehydrateCSS from '../src/ssr'
+import ssr from '../src/ssr'
+import ssrReact from '../src/ssrReact'
+import ssrAmp from '../src/ssrAmp'
 
 const testTheme = {
   font: {
@@ -56,6 +58,9 @@ describe('Freyja', () => {
   })
 
   it('renders dehydrated CSS for SSR', () => {
-    assert(dehydrateCSS(subject()) === '<style data-emotion-css="6fytqd 1mhbhs2">.css-6fytqd{text-align:center;padding:24px;}.css-1mhbhs2{color:red;font-family:Merriweather;}</style>')
+    const html = subject()
+    assert(ssr(html) === '<style data-emotion-css="6fytqd 1mhbhs2">.css-6fytqd{text-align:center;padding:24px;}.css-1mhbhs2{color:red;font-family:Merriweather;}</style>')
+    assert(renderToString(ssrReact(html)) === '<style data-emotion-css="6fytqd 1mhbhs2" data-reactroot="">.css-6fytqd{text-align:center;padding:24px;}.css-1mhbhs2{color:red;font-family:Merriweather;}</style>')
+    assert(ssrAmp(html) === '.css-6fytqd{text-align:center;padding:24px;}.css-1mhbhs2{color:red;font-family:Merriweather;}')
   })
 })
