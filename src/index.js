@@ -1,4 +1,4 @@
-import {compose, mapProps} from 'recompose'
+import {compose, withProps} from 'recompose'
 import {css, keyframes} from 'emotion'
 import {createTheming} from 'theming'
 import fast from 'fast.js'
@@ -20,8 +20,7 @@ const renderStyles = styleHash =>
 
 export default styles => compose(
   withTheme,
-  mapProps(props => ({
-    ...props,
+  withProps(props => ({
     styles: renderStyles(styles(props))
   }))
 )

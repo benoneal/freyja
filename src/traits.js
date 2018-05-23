@@ -1,4 +1,6 @@
+import fast from 'fast.js'
 const {keys} = Object
+const {pow} = Math
 
 // Dimension helpers
 const rhythm = [0.25, 0.5, 0.6, 0.7, 0.85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20]
@@ -13,14 +15,11 @@ export const media = {
 }
 
 // Typography helpers
-const {pow} = Math
-
-const scaledType = (size, typeLevel, scale) => (
+const scaledType = (size, typeLevel, scale) =>
   pow(scale, typeLevel) * size
-)
-const calc = (minSize, maxSize, minViewWidth, maxViewWidth, unit = 'px') => (
+
+const calc = (minSize, maxSize, minViewWidth, maxViewWidth, unit = 'px') =>
   `calc(${minSize}${unit} + (${maxSize - minSize}) * ((100vw - ${minViewWidth}${unit}) / (${maxViewWidth - minViewWidth})))`
-)
 
 export const fluidType = ({
   minFontSize = 16,
@@ -53,51 +52,46 @@ const directions = {
   left: '270deg'
 }
 
-export const gradient = keys(directions).reduce((acc, direction) => ({
-  ...acc,
-  [direction]: (color1, color2) => ({
+export const gradient = fast.reduce(keys(directions), (acc, direction) => {
+  acc[direction] = (color1, color2) => ({
     backgroundImage: `linear-gradient(${directions[direction]}, ${color1}, ${color2})`
   })
-}), {
+  return acc
+}, {
   center: (color1, color2) => ({
     backgroundImage: `radial-gradient(circle, ${color1}, ${color2})`
   })
 })
 
+const prefixReducer = (acc, prefix) => {
+  acc[prefix] = style
+  return acc
+}
 // Pseudo-element helpers
-export const placeholder = (style) => (
-[
+const placeholderPrefixes = [
   '::-webkit-input-placeholder',
   ':-moz-placeholder',
   '::-moz-placeholder',
   ':-ms-input-placeholder'
-].reduce((acc, selector) => ({
-  ...acc,
-  [selector]: style
-}), {})
-)
+]
+export const placeholder = style =>
+  fast.reduce(placeholderPrefixes, prefixReducer, {})
 
-export const rangeThumb = (style) => (
-[
+const rangeThumbPrefixes = [
   '::-webkit-slider-thumb',
   '::-moz-range-thumb',
   '::-ms-thumb'
-].reduce((acc, selector) => ({
-  ...acc,
-  [selector]: style
-}), {})
-)
+]
+export const rangeThumb = style => 
+  fast.reduce(rangeThumbPrefixes, prefixReducer, {})
 
-export const rangeTrack = (style) => (
-[
+const rangeTrackPrefixes = [
   '::-webkit-slider-runnable-track',
   '::-moz-range-track',
   '::-ms-track'
-].reduce((acc, selector) => ({
-  ...acc,
-  [selector]: style
-}), {})
-)
+]
+export const rangeTrack = style => 
+  fast.reduce(rangeTrackPrefixes, prefixReducer, {})
 
 // Flex helpers
 export const layout = {
@@ -142,7 +136,7 @@ export const ease = {
   in: 'cubic-bezier(.36,.01,.8,.65)'
 }
 
-export const transition = keys(ease).reduce((acc, easing) => ({
+export const transition = fast.reduce(keys(ease), (acc, easing) => ({
   ...acc,
   [easing]: {
     fast: {transition: `all 200ms ${ease[easing]}`},

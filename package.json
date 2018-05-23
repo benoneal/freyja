@@ -1,6 +1,6 @@
 {
   "name": "freyja",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Functional interface to pass styles as props to components. Powered by Emotion.",
   "repository": "https://github.com/benoneal/freyja",
   "main": "index.js",
