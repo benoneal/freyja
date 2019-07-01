@@ -1,9 +1,13 @@
 {
   "presets": [
-    "es2015",
-    "stage-0"
-  ],
-  "plugins": [
-    "transform-react-jsx"
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": true
+        }
+      }
+    ],
+    "@babel/preset-react"
   ]
 }

@@ -1,20 +1,6 @@
-import moize from 'moize'
+import {isBrowser, find} from './utils'
 
-const m = moize({
-  serialize: true,
-  maxSize: 1000,
-  maxArgs: 2,
-  maxAge: 1000 * 60 * 15
-})
-
-const {isArray} = Array
-
-const hasWindow = () => typeof window !== 'undefined'
-const hasDocument = () => typeof document !== 'undefined'
-const isBrowser = (() => hasWindow() && hasDocument() && document.nodeType === 9)()
-
-const kebab = (key) => key.replace(/([A-Z]|^ms|^webkit)/g, g => '-' + g.toLowerCase())
-
+const prefixCache = {}
 const supportedProperties = (() => isBrowser ? document.createElement('p').style : {})()
 
 const VENDORS = {
@@ -32,82 +18,61 @@ const jsPrefix = (() => {
   if (typeof navigator === 'undefined') return ''
   const ua = navigator.userAgent || navigator.vendor || (isBrowser && window.opera)
   const match = /(opera|msie|firefox|chrome|safari|fban|fbav|node)/.exec(ua.toLowerCase())
+  if (!match) console.warn('Freyja: No browser match found. Vendor prefixes will be absent.')
   return match ? VENDORS[match[0]] : ''
 })()
 
 export const cssPrefix = `-${jsPrefix.toLowerCase()}-`
 
-export const prefixProperty = m((property, prefix = jsPrefix) => {
+export const prefixProperty = (property, prefix = jsPrefix) => {
+  const _key = property + prefix
+  if (prefixCache[_key]) return prefixCache[_key]
   const prefixed = prefix + property.slice(0, 1).toUpperCase() + property.slice(1)
 
   if (property === 'justifyContent' && prefix === 'ms') {
     property = 'msFlexPack'
   }
   if (!prefix || property in supportedProperties) {
-    return property
+    return prefixCache[_key] = property
   } else if (ALTERNATE_PROPS[property] in supportedProperties) {
-    return ALTERNATE_PROPS[property]
-  } else if (PREFIXABLE_PROPS.find((p) => property.startsWith(p)) && prefixed in supportedProperties) {
-    return prefixed
+    return prefixCache[_key] = ALTERNATE_PROPS[property]
+  } else if (find(p => property.startsWith(p), PREFIXABLE_PROPS) && prefixed in supportedProperties) {
+    return prefixCache[_key] = prefixed
   } else {
-    return property
+    return prefixCache[_key] = property
   }
-})
+}
 
-export const prefixValue = m((property, value) => {
-  if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value
-  if (property === 'content' && !value.length) value = '""'
+export const prefixValue = (property, value) => {
+  const _key = property + value
+  if (prefixCache[_key]) return prefixCache[_key]
+  if (typeof value !== 'string') return prefixCache[_key] = value
+  if (property === 'content' && !value.length) return prefixCache[_key] = '""'
 
-  const tryValue = (value) => {
+  const tryValue = value => {
     supportedProperties[property] = ''
     supportedProperties[property] = value
     return !!supportedProperties[property].length
   }
 
   try {
-    tryValue(value)
+    if (tryValue(value)) return prefixCache[_key] = value
   } catch (err) { // IE is shit
-    return value
+    return prefixCache[_key] = value
   }
 
   const prefixed = cssPrefix + value
-  const alternate = isArray(ALTERNATE_VALUES[value]) && ALTERNATE_VALUES[value].find(tryValue)
-
-  if (tryValue(value)) {
-    return value
-  } else if (PREFIXABLE_VALUES.find((v) => value.startsWith(v)) && tryValue(prefixed)) {
-    return prefixed
-  } else if (alternate) {
-    return alternate
-  } else {
-    return value
-  }
-})
-
-const addVendorPrefixes = m((style) => {
-  const prefixedStyle = {}
-
-  for (const property in style) {
-    const value = style[property]
-
-    if (value instanceof Object) {
-      prefixedStyle[property] = addVendorPrefixes(value)
-    } else {
-      prefixedStyle[kebab(prefixProperty(property))] = prefixValue(property, addPx(property, value))
-    }
+  if (find(v => value.startsWith(v), PREFIXABLE_VALUES) && tryValue(prefixed)) {
+    return prefixCache[_key] = prefixed
   }
 
-  return prefixedStyle
-})
+  const alternate = find(tryValue, ALTERNATE_VALUES[value])
+  if (alternate) return prefixCache[_key] = alternate
 
-export default addVendorPrefixes
-
-const addPx = (prop, value) => {
-  if (typeof value !== 'number' || unitlessProps[prop]) return value
-  return value + 'px'
+  return prefixCache[_key] = value
 }
 
-const PREFIXABLE_PROPS = [
+export const PREFIXABLE_PROPS = [
   'accelerator',
   'animation',
   'appearance',
@@ -170,7 +135,7 @@ const PREFIXABLE_PROPS = [
   'wrap'
 ]
 
-const ALTERNATE_PROPS = {
+export const ALTERNATE_PROPS = {
   alignContent: 'msFlexLinePack',
   alignSelf: 'msFlexItemAlign',
   alignItems: 'msFlexAlign',
@@ -181,51 +146,20 @@ const ALTERNATE_PROPS = {
   flexBasis: 'msPreferredSize'
 }
 
-const PREFIXABLE_VALUES = [
+export const PREFIXABLE_VALUES = [
   'grid',
   'inline-grid',
   'linear-gradient',
   'radial-gradient',
   'repeating-linear-gradient',
-  'repeating-radial-gradient'
+  'repeating-radial-gradient',
 ]
 
-const ALTERNATE_VALUES = {
+export const ALTERNATE_VALUES = {
   'break-all': ['break-word'],
   'flex': ['-webkit-box', '-ms-flexbox', '-webkit-flex'],
   'flex-end': ['end'],
   'flex-start': ['start'],
   'space-around': ['distribute'],
   'space-between': ['justify']
-}
-
-const unitlessProps = {
-  animationIterationCount: true,
-  boxFlex: true,
-  boxFlexGroup: true,
-  boxOrdinalGroup: true,
-  columnCount: true,
-  flex: true,
-  flexGrow: true,
-  flexPositive: true,
-  flexShrink: true,
-  flexNegative: true,
-  flexOrder: true,
-  gridRow: true,
-  gridColumn: true,
-  fontWeight: true,
-  lineClamp: true,
-  lineHeight: true,
-  opacity: true,
-  order: true,
-  orphans: true,
-  tabSize: true,
-  widows: true,
-  zIndex: true,
-  zoom: true,
-  fillOpacity: true,
-  stopOpacity: true,
-  strokeDashoffset: true,
-  strokeOpacity: true,
-  strokeWidth: true
 }

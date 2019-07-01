@@ -1,26 +1,30 @@
-import {compose, withProps} from 'recompose'
-import {css, keyframes} from 'emotion'
+import React from 'react'
 import {createTheming} from 'theming'
-import fast from 'fast.js'
+import {compose, withProps} from 'recompose'
+import css, {hydrate} from './css'
+import {reduce, entries} from './utils'
+export {animation, styleTags, StyleComponents} from './css'
 
-const CHANNEL = '__FREYJA__'
-
-const freyjaTheme = createTheming(CHANNEL)
+const freyjaTheme = createTheming(React.createContext({}))
 
 export const withTheme = freyjaTheme.withTheme
 export const ThemeProvider = freyjaTheme.ThemeProvider
-export const animation = keyframes
+export const useTheme = freyjaTheme.useTheme
 
-const {keys} = Object
-const renderStyles = styleHash => 
-  fast.reduce(keys(styleHash), (acc, key) => {
-    acc[key] = css(styleHash[key])
+hydrate()
+
+const renderStyles = styleMap =>
+  reduce((acc, [key, val]) => {
+    acc[key] = css(val)
     return acc
-  }, {})
+  }, {}, entries(styleMap))
 
-export default styles => compose(
+export const useStyles = (stylesFn, props = {}) =>
+  renderStyles(stylesFn({...props, theme: useTheme()}))
+
+export default stylesFn => compose(
   withTheme,
   withProps(props => ({
-    styles: renderStyles(styles(props))
+    styles: renderStyles(stylesFn(props))
   }))
 )

@@ -1,5 +1,4 @@
-import fast from 'fast.js'
-const {keys} = Object
+import {reduce, entries} from './utils'
 const {pow} = Math
 
 // Dimension helpers
@@ -52,18 +51,18 @@ const directions = {
   left: '270deg'
 }
 
-export const gradient = fast.reduce(keys(directions), (acc, direction) => {
+export const gradient = reduce((acc, [direction, angle]) => {
   acc[direction] = (color1, color2) => ({
-    backgroundImage: `linear-gradient(${directions[direction]}, ${color1}, ${color2})`
+    backgroundImage: `linear-gradient(${angle}, ${color1}, ${color2})`
   })
   return acc
 }, {
   center: (color1, color2) => ({
     backgroundImage: `radial-gradient(circle, ${color1}, ${color2})`
   })
-})
+}, entries(directions))
 
-const prefixReducer = (acc, prefix) => {
+const prefixReducer = style => (acc, prefix) => {
   acc[prefix] = style
   return acc
 }
@@ -75,23 +74,23 @@ const placeholderPrefixes = [
   ':-ms-input-placeholder'
 ]
 export const placeholder = style =>
-  fast.reduce(placeholderPrefixes, prefixReducer, {})
+  reduce(prefixReducer(style), {}, placeholderPrefixes)
 
 const rangeThumbPrefixes = [
   '::-webkit-slider-thumb',
   '::-moz-range-thumb',
   '::-ms-thumb'
 ]
-export const rangeThumb = style => 
-  fast.reduce(rangeThumbPrefixes, prefixReducer, {})
+export const rangeThumb = style =>
+  reduce(prefixReducer(style), {}, rangeThumbPrefixes)
 
 const rangeTrackPrefixes = [
   '::-webkit-slider-runnable-track',
   '::-moz-range-track',
   '::-ms-track'
 ]
-export const rangeTrack = style => 
-  fast.reduce(rangeTrackPrefixes, prefixReducer, {})
+export const rangeTrack = style =>
+  reduce(prefixReducer(style), {}, rangeTrackPrefixes)
 
 // Flex helpers
 export const layout = {
@@ -136,15 +135,15 @@ export const ease = {
   in: 'cubic-bezier(.36,.01,.8,.65)'
 }
 
-export const transition = fast.reduce(keys(ease), (acc, easing) => ({
+export const transition = reduce((acc, [easing, curve]) => ({
   ...acc,
   [easing]: {
-    fast: {transition: `all 200ms ${ease[easing]}`},
-    medium: {transition: `all 320ms ${ease[easing]}`},
-    slow: {transition: `all 480ms ${ease[easing]}`}
+    fast: {transition: `all 200ms ${curve}`},
+    medium: {transition: `all 320ms ${curve}`},
+    slow: {transition: `all 480ms ${curve}`}
   }
 }), {
   fast: {transition: 'all 200ms ease-in-out'},
   medium: {transition: 'all 320ms ease-in-out'},
   slow: {transition: 'all 480ms ease-in-out'}
-})
+}, entries(ease))
