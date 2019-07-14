@@ -35,7 +35,6 @@
   "dependencies": {
     "abab": "^2.0.0",
     "react": "^16.8.6",
-    "recompose": "^0.30.0",
     "theming": "^3.2.0"
   }
 }

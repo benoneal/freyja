@@ -1,6 +1,6 @@
 import React from 'react'
 import {renderToString} from 'react-dom/server'
-import {useStyles, animation, styleTags, StyleComponents, ThemeProvider} from '../src'
+import useStyles, {animation, styleTags, StyleComponents, ThemeProvider} from '../src'
 
 const testTheme = {
   font: {

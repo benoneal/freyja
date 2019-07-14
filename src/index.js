@@ -1,6 +1,5 @@
 import React from 'react'
 import {createTheming} from 'theming'
-import {compose, withProps} from 'recompose'
 import css, {hydrate} from './css'
 import {reduce, entries} from './utils'
 export {animation, styleTags, StyleComponents} from './css'
@@ -19,12 +18,6 @@ const renderStyles = styleMap =>
     return acc
   }, {}, entries(styleMap))
 
-export const useStyles = (stylesFn, props = {}) =>
+export default (stylesFn, props = {}) =>
   renderStyles(stylesFn({...props, theme: useTheme()}))
 
-export default stylesFn => compose(
-  withTheme,
-  withProps(props => ({
-    styles: renderStyles(stylesFn(props))
-  }))
-)
