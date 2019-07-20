@@ -12,16 +12,17 @@ const injectSheet = (doc, id) => {
 }
 
 const createSheet = (doc, id) => {
-  if (!isBrowser) return () => {}
   const s = doc.getElementById(id) || injectSheet(doc, id)
   const {sheet} = s
   return rule => sheet.insertRule(rule, sheet.cssRules.length)
 }
 
+const noop = () => {}
+
 const sheets = {
-  keyframes: createSheet(document, '__freyja_keyframes'),
-  classes: createSheet(document, '__freyja_classes'),
-  mediaqueries: createSheet(document, '__freyja_mediaqueries'),
+  keyframes: isBrowser ? createSheet(document, '__freyja_keyframes') : noop,
+  classes: isBrowser ? createSheet(document, '__freyja_classes') : noop,
+  mediaqueries: isBrowser ? createSheet(document, '__freyja_mediaqueries') : noop,
 }
 
 const rules = {
