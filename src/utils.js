@@ -1,4 +1,4 @@
-const isNode = typeof module !== 'undefined' && (!self || self.module !== module)
+const isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]'
 export const hasWindow = _ => typeof window !== 'undefined'
 export const hasDocument = _ => typeof document !== 'undefined'
 export const isBrowser = (_ => !isNode && hasWindow() && hasDocument() && document.nodeType === 9)()
