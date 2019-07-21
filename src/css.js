@@ -70,7 +70,7 @@ const css = (obj, child = '', media) =>
     if (typeof val === 'object') {
       const m2 = isMediaQuery(key) ? key : null
       const c2 = m2 ? child : child + key
-      return parse(val, c2, m2 || media)
+      return css(val, c2, m2 || media)
     }
     const _key = key + val + child + media
     if (cache[_key]) return cache[_key]

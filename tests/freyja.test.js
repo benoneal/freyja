@@ -1,6 +1,7 @@
 import React from 'react'
 import {renderToString} from 'react-dom/server'
 import useStyles, {animation, styleTags, StyleComponents, ThemeProvider} from '../src'
+import {media} from '../src/traits'
 
 const testTheme = {
   font: {
@@ -23,7 +24,10 @@ const titleStyles = ({
 }) => ({
   wrapper: {
     textAlign: 'center',
-    padding: scale.large
+    padding: scale.large,
+    [media.tablet]: {
+      padding: scale.small
+    }
   },
   title: {
     color,
@@ -57,16 +61,16 @@ const subject = () => renderToString(
 
 describe('Freyja', () => {
   it('generates valid styled markup with classNames', () => {
-    expect(subject()).toBe('<div class="f2 f3"><h1 class="f4 f5 f6">My test title</h1></div>')
+    expect(subject()).toBe('<div class="f2 f3 f4"><h1 class="f5 f6 f7">My test title</h1></div>')
   })
 
   it('renders dehydrated CSS as style tag strings for SSR', () => {
     subject()
-    expect(styleTags()).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"7\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsImNvbG9ycmVkdW5kZWZpbmVkIjoiZjQiLCJmb250RmFtaWx5TWVycml3ZWF0aGVydW5kZWZpbmVkIjoiZjUiLCJhbmltYXRpb25OYW1lYW53Y25iYWZ1bmRlZmluZWQiOiJmNiJ9\">.f2{text-align:center}.f3{padding:24px}.f4{color:red}.f5{font-family:Merriweather}.f6{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\"></style>')
+    expect(styleTags()).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlNZXJyaXdlYXRoZXJ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:Merriweather}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
   })
 
   it('renders dehydrated CSS as react style components for SSR', () => {
     subject()
-    expect(renderToString(<StyleComponents />)).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"7\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsImNvbG9ycmVkdW5kZWZpbmVkIjoiZjQiLCJmb250RmFtaWx5TWVycml3ZWF0aGVydW5kZWZpbmVkIjoiZjUiLCJhbmltYXRpb25OYW1lYW53Y25iYWZ1bmRlZmluZWQiOiJmNiJ9\">.f2{text-align:center}.f3{padding:24px}.f4{color:red}.f5{font-family:Merriweather}.f6{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\"></style>')
+    expect(renderToString(<StyleComponents />)).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlNZXJyaXdlYXRoZXJ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:Merriweather}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
   })
 })
