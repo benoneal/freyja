@@ -5,7 +5,7 @@ import {entries, mutMap, forEntries, reduce, isBrowser, isMediaQuery} from './ut
 import {unitlessProps} from './props'
 
 const injectSheet = (doc, id) => {
-  const s = doc.createElement('iframe')
+  const s = doc.createElement('style')
   s.id = id
   doc.head.appendChild(s)
   return s
@@ -105,9 +105,9 @@ export const StyleComponents = () => {
   reset()
   return (
     <>
-      <style id='__freyja_keyframes'>{keyframes}</style>
-      <style id='__freyja_classes' data-freyja-rules={rules} data-freyja-cache={cache}>{classes}</style>
-      <style id='__freyja_mediaqueries'>{mediaqueries}</style>
+      <style id='__freyja_keyframes' dangerouslySetInnerHTML={{__html: keyframes}} />
+      <style id='__freyja_classes' data-freyja-rules={rules} data-freyja-cache={cache}  dangerouslySetInnerHTML={{__html: classes}} />
+      <style id='__freyja_mediaqueries' dangerouslySetInnerHTML={{__html: mediaqueries}} />
     </>
   )
 }

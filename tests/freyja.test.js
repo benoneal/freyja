@@ -5,8 +5,7 @@ import {media} from '../src/traits'
 
 const testTheme = {
   font: {
-    display: 'Merriweather',
-    copy: 'Helvetica'
+    display: '"Zilla Slab", serif'
   },
   scale: {
     small: 12,
@@ -66,11 +65,11 @@ describe('Freyja', () => {
 
   it('renders dehydrated CSS as style tag strings for SSR', () => {
     subject()
-    expect(styleTags()).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlNZXJyaXdlYXRoZXJ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:Merriweather}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
+    expect(styleTags()).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlcIlppbGxhIFNsYWJcIiwgc2VyaWZ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:"Zilla Slab", serif}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
   })
 
   it('renders dehydrated CSS as react style components for SSR', () => {
     subject()
-    expect(renderToString(<StyleComponents />)).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlNZXJyaXdlYXRoZXJ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:Merriweather}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
+    expect(renderToString(<StyleComponents />)).toBe('<style id=\"__freyja_keyframes\">@--keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}@keyframes anwcnbaf {from {transform:rotate(0deg);} to {transform:rotate(360deg);}}</style><style id=\"__freyja_classes\" data-freyja-rules=\"8\" data-freyja-cache=\"eyJhbndjbmJhZiI6ImFud2NuYmFmIiwidGV4dEFsaWduY2VudGVydW5kZWZpbmVkIjoiZjIiLCJwYWRkaW5nMjR1bmRlZmluZWQiOiJmMyIsInBhZGRpbmcxMkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDU4MHB4KSI6ImY0IiwiY29sb3JyZWR1bmRlZmluZWQiOiJmNSIsImZvbnRGYW1pbHlcIlppbGxhIFNsYWJcIiwgc2VyaWZ1bmRlZmluZWQiOiJmNiIsImFuaW1hdGlvbk5hbWVhbndjbmJhZnVuZGVmaW5lZCI6ImY3In0=\">.f2{text-align:center}.f3{padding:24px}.f5{color:red}.f6{font-family:"Zilla Slab", serif}.f7{animation-name:anwcnbaf}</style><style id=\"__freyja_mediaqueries\">@media screen and (min-width: 580px){.f4{padding:12px}}</style>')
   })
 })
