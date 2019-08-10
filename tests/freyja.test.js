@@ -24,6 +24,7 @@ const titleStyles = ({
   wrapper: {
     textAlign: 'center',
     padding: scale.large,
+    margin: undefined,
     [media.tablet]: {
       padding: scale.small
     }

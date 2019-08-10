@@ -66,7 +66,7 @@ export const animation = obj => {
 
 const css = (obj, child = '', media) =>
   mutMap(([key, val]) => {
-    if (val === null) return ''
+    if (val === null || val === undefined) return ''
     if (typeof val === 'object') {
       const m2 = isMediaQuery(key) ? key : null
       const c2 = m2 ? child : child + key
@@ -78,7 +78,7 @@ const css = (obj, child = '', media) =>
     const className = prefix + ruleCount.toString(36)
     insert(mx(rx(className + noAnd(child), key, val), media), sh)
     return cache[_key] = className
-  }, entries(obj)).join(' ')
+  }, entries(obj)).filter(Boolean).join(' ')
 
 const styleData = _ => [
   rules.keyframes.join(''),
