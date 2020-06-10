@@ -38,7 +38,7 @@ const titleStyles = ({
 })
 
 const Title = props => {
-  const {wrapper, title} = useStyles(titleStyles, props)
+  const styles = useStyles(titleStyles, props)
   const {text, children} = props
   return (
     <div className={styles.wrapper}>
