@@ -115,8 +115,8 @@ export const StyleComponents = () => {
 export const hydrate = _ => {
   if (!isBrowser) return
   const s = document.getElementById('__freyja_classes')
-  if (!s) return
-  cache = JSON.parse(atob(s.dataset.freyjaCache))
+  if (!s.dataset.freyjaCache) return
+  cache = JSON.parse(atob(s.dataset.freyjaCache)) || {}
   ruleCount = parseInt(s.dataset.freyjaRules)
 }
 
