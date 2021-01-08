@@ -1,51 +1,37 @@
-import buble from 'rollup-plugin-buble'
-import babel from 'rollup-plugin-babel'
-import {uglify} from 'rollup-plugin-uglify'
+import buble from '@rollup/plugin-buble'
+import {terser} from 'rollup-plugin-terser'
 import pack from './package.json'
 
 const external = [...Object.keys(pack.peerDependencies), 'react-dom/server']
 
 const plugins = [
-  babel({
-    babelrc: false,
-    exclude: 'node_modules/**',
-    presets: ['@babel/env', '@babel/preset-react'],
-    plugins: [
-      '@babel/plugin-syntax-jsx',
-    ],
+  buble({
+    objectAssign: true,
+    transforms: {
+      asyncAwait: false,
+      spreadRest: false,
+      generator: false,
+      dangerousForOf: true,
+    },
   }),
-  buble({objectAssign: 'Object.assign'}),
-  uglify({
-    sourcemap: false,
-    mangle: true,
-    compress: {negate_iife: false, expression: true},
-  }),
+  terser(),
 ]
 
 export default [{
   input: 'src/index.js',
   plugins,
   external,
+  treeshake: {
+    moduleSideEffects: false,
+    propertyReadSideEffects: false,
+    unknownGlobalSideEffects: false,
+  },
   output: {
     file: 'index.js',
     format: 'cjs',
     exports: 'named',
+    sourcemap: false,
+    strict: false,
     globals: {react: 'React'},
-    strict: false,
-    treeshake: {
-      pureExternalModules: true,
-    }
-  }
-}, {
-  input: 'src/traits.js',
-  plugins,
-  external,
-  output: {
-    file: 'traits.js',
-    format: 'cjs',
-    strict: false,
-    treeshake: {
-      pureExternalModules: true,
-    }
   }
 }];

@@ -1,6 +1,6 @@
 # Freyja
 
-A full-featured functional CSS-in-JS solution, adapted from [CXS](https://github.com/cxs-css/cxs) to make it suitable for production websites. You provide a function accepting component `props` and your application's `theme`, and returning a map of styles (`({...props, theme}) => ({key1: style, key2: style})`), and `useStyles` will return a map of classnames (like `{key1: className, key2: className}`).
+A full-featured functional CSS-in-JS solution, adapted from [CXS](https://github.com/cxs-css/cxs) to make it suitable for production websites. You provide a function accepting component `props` and your application's `theme`, and returning a map of styles (`(theme, props, helpers) => ({key1: style, key2: style})`), and `useStyles` will return a map of classnames (like `{key1: className, key2: className}`).
 
 - Everything CXS has plus:
 - React hook API
@@ -20,20 +20,22 @@ Create your styled component.
 import useStyles from 'freyja'
 
 // this could be in a separate file if you like
-const titleStyles = ({
-  color,
-  theme: {
-    font,
-    scale
-  }
-}) => ({
+const titleStyles = ({font, scale}, {color}, {animation}) => ({
   wrapper: {
     textAlign: 'center',
     padding: scale.large
   },
   title: {
     color,
-    fontFamily: font.display
+    fontFamily: font.display,
+    animationName: animation({
+      from: {
+        opacity: 0
+      },
+      to: {
+        opacity: 1
+      }
+    })
   }
 })
 
@@ -47,7 +49,7 @@ const Title = props => {
   )
 }
 
-export const Title
+export default Title
 
 // use like: <Title color={'red'} text={'My first title'} />
 ```
@@ -56,10 +58,8 @@ Wrap your app in a `ThemeProvider` (must have only 1 child). Multiple `ThemeProv
 
 ```js
 import {ThemeProvider, animation} from 'freyja'
-import * as traits from 'freyja/traits' // optional helper methods
 
 const theme = {
-  ...traits,
   font: {
     display: 'Merriweather',
     copy: 'Helvetica'
@@ -104,7 +104,7 @@ import App from './App'
 
 const renderMiddleware = (req, res) => {
   const appHTML = renderToString(<App />)
-  const appStyleTags = styleTags()
+  const appStyleTags = styleTags() // must be called AFTER renderToString()
 
   res.send(`
     <!doctype html>

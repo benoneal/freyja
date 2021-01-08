@@ -1,5 +1,5 @@
-import {reduce, entries} from './utils'
 const {pow} = Math
+const {entries} = Object
 
 // Dimension helpers
 const rhythm = [0.25, 0.5, 0.6, 0.7, 0.85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20]
@@ -51,7 +51,7 @@ const directions = {
   left: '270deg'
 }
 
-export const gradient = reduce((acc, [direction, angle]) => {
+export const gradient = entries(directions).reduce((acc, [direction, angle]) => {
   acc[direction] = (color1, color2) => ({
     backgroundImage: `linear-gradient(${angle}, ${color1}, ${color2})`
   })
@@ -60,7 +60,7 @@ export const gradient = reduce((acc, [direction, angle]) => {
   center: (color1, color2) => ({
     backgroundImage: `radial-gradient(circle, ${color1}, ${color2})`
   })
-}, entries(directions))
+})
 
 const prefixReducer = style => (acc, prefix) => {
   acc[prefix] = style
@@ -74,7 +74,7 @@ const placeholderPrefixes = [
   ':-ms-input-placeholder'
 ]
 export const placeholder = style =>
-  reduce(prefixReducer(style), {}, placeholderPrefixes)
+  placeholderPrefixes.reduce(prefixReducer(style), {})
 
 const rangeThumbPrefixes = [
   '::-webkit-slider-thumb',
@@ -82,7 +82,7 @@ const rangeThumbPrefixes = [
   '::-ms-thumb'
 ]
 export const rangeThumb = style =>
-  reduce(prefixReducer(style), {}, rangeThumbPrefixes)
+  rangeThumbPrefixes.reduce(prefixReducer(style), {})
 
 const rangeTrackPrefixes = [
   '::-webkit-slider-runnable-track',
@@ -90,7 +90,7 @@ const rangeTrackPrefixes = [
   '::-ms-track'
 ]
 export const rangeTrack = style =>
-  reduce(prefixReducer(style), {}, rangeTrackPrefixes)
+  rangeTrackPrefixes.reduce(prefixReducer(style), {})
 
 // Flex helpers
 export const layout = {
@@ -135,7 +135,7 @@ export const ease = {
   in: 'cubic-bezier(.36,.01,.8,.65)'
 }
 
-export const transition = reduce((acc, [easing, curve]) => ({
+export const transition = entries(ease).reduce((acc, [easing, curve]) => ({
   ...acc,
   [easing]: {
     fast: {transition: `all 200ms ${curve}`},
@@ -146,4 +146,4 @@ export const transition = reduce((acc, [easing, curve]) => ({
   fast: {transition: 'all 200ms ease-in-out'},
   medium: {transition: 'all 320ms ease-in-out'},
   slow: {transition: 'all 480ms ease-in-out'}
-}, entries(ease))
+})

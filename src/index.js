@@ -1,8 +1,11 @@
 import React from 'react'
 import {createTheming} from 'theming'
-import css, {hydrate} from './css'
-import {reduce, entries} from './utils'
-export {animation, styleTags, StyleComponents} from './css'
+import css, {hydrate, animation} from './css'
+import * as traits from './traits'
+export {styleTags, StyleComponents} from './css'
+
+const {entries} = Object
+const helpers = {...traits, animation}
 
 const freyjaTheme = createTheming(React.createContext({}))
 
@@ -13,11 +16,10 @@ export const useTheme = freyjaTheme.useTheme
 hydrate()
 
 const renderStyles = styleMap =>
-  reduce((acc, [key, val]) => {
+  entries(styleMap).reduce((acc, [key, val]) => {
     acc[key] = css(val)
     return acc
-  }, {}, entries(styleMap))
+  }, {})
 
 export default (stylesFn, props = {}) =>
-  renderStyles(stylesFn({...props, theme: useTheme()}))
-
+  renderStyles(stylesFn(useTheme(), props, helpers))

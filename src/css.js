@@ -1,8 +1,10 @@
 import React from 'react'
 import {atob, btoa} from 'abab'
 import {prefixProperty, prefixValue, cssPrefix} from './prefixer'
-import {entries, mutMap, forEntries, reduce, isBrowser, isMediaQuery} from './utils'
+import {mutMap, isBrowser, isMediaQuery} from './utils'
 import {unitlessProps} from './props'
+
+const {entries} = Object
 
 const injectSheet = (doc, id) => {
   const s = doc.createElement('style')
@@ -57,7 +59,7 @@ export const animation = obj => {
   const name = hash(JSON.stringify(obj))
   if (cache[name]) return cache[name]
   const frames = mutMap(([frame, val]) =>
-    `${frame} {${reduce((acc, [p, v]) => `${acc}${hyph(p)}:${px(p, v)};`, '', entries(val))}}`
+    `${frame} {${entries(val).reduce((acc, [p, v]) => `${acc}${hyph(p)}:${px(p, v)};`, '')}}`
   , entries(obj)).join(' ')
   insert(kf(name, frames, true), 'keyframes')
   insert(kf(name, frames), 'keyframes')
@@ -90,7 +92,7 @@ const styleData = _ => [
 
 const reset = _ => {
   cache = {}
-  forEntries(k => rules[k] = [], rules)
+  for (const k in rules) rules[k] = []
   ruleCount = 0
 }
 

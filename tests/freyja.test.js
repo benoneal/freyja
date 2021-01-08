@@ -1,7 +1,6 @@
 import React from 'react'
 import {renderToString} from 'react-dom/server'
-import useStyles, {animation, styleTags, StyleComponents, ThemeProvider} from '../src'
-import {media} from '../src/traits'
+import useStyles, {styleTags, StyleComponents, ThemeProvider} from '../src'
 
 const testTheme = {
   font: {
@@ -15,11 +14,13 @@ const testTheme = {
 }
 
 const titleStyles = ({
+  font,
+  scale
+}, {
   color,
-  theme: {
-    font,
-    scale
-  }
+}, {
+  media,
+  animation
 }) => ({
   wrapper: {
     textAlign: 'center',

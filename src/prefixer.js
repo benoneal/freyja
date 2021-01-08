@@ -1,4 +1,4 @@
-import {isBrowser, find} from './utils'
+import {isBrowser} from './utils'
 
 const prefixCache = {}
 const supportedProperties = (() => isBrowser ? document.createElement('p').style : {})()
@@ -36,7 +36,7 @@ export const prefixProperty = (property, prefix = jsPrefix) => {
     return prefixCache[_key] = property
   } else if (ALTERNATE_PROPS[property] in supportedProperties) {
     return prefixCache[_key] = ALTERNATE_PROPS[property]
-  } else if (find(p => property.startsWith(p), PREFIXABLE_PROPS) && prefixed in supportedProperties) {
+  } else if (PREFIXABLE_PROPS.find(p => property.startsWith(p)) && prefixed in supportedProperties) {
     return prefixCache[_key] = prefixed
   } else {
     return prefixCache[_key] = property
@@ -62,11 +62,11 @@ export const prefixValue = (property, value) => {
   }
 
   const prefixed = cssPrefix + value
-  if (find(v => value.startsWith(v), PREFIXABLE_VALUES) && tryValue(prefixed)) {
+  if (PREFIXABLE_VALUES.find(v => value.startsWith(v)) && tryValue(prefixed)) {
     return prefixCache[_key] = prefixed
   }
 
-  const alternate = find(tryValue, ALTERNATE_VALUES[value])
+  const alternate = ALTERNATE_VALUES[value].find(tryValue)
   if (alternate) return prefixCache[_key] = alternate
 
   return prefixCache[_key] = value
