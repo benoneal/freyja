@@ -26,12 +26,20 @@ export default [{
     propertyReadSideEffects: false,
     unknownGlobalSideEffects: false,
   },
-  output: {
-    file: 'index.js',
+  output: [{
+    file: 'entry-esm.js',
+    format: 'es',
+    exports: 'named',
+    sourcemap: false,
+    strict: false,
+    globals: {react: 'React'},
+  },
+  {
+    file: 'entry-cjs.js',
     format: 'cjs',
     exports: 'named',
     sourcemap: false,
     strict: false,
     globals: {react: 'React'},
-  }
+  }]
 }];

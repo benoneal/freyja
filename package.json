@@ -3,7 +3,15 @@
   "version": "5.0.0",
   "description": "Functional interface to pass styles as props to components",
   "repository": "https://github.com/benoneal/freyja",
-  "main": "index.js",
+  "type": "module",
+  "main": "./entry-cjs.js",
+  "exports": {
+    ".": {
+      "require":  "./entry-cjs.js",
+      "default": "./entry-esm.js"
+    }
+  },
+  "module": "./entry-esm.js",
   "scripts": {
     "prepare": "rollup -c",
     "test": "jest",
