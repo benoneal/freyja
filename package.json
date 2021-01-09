@@ -1,13 +1,13 @@
 {
   "name": "freyja",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Functional interface to pass styles as props to components",
   "repository": "https://github.com/benoneal/freyja",
   "type": "module",
   "main": "./entry-cjs.js",
   "exports": {
     ".": {
-      "require":  "./entry-cjs.js",
+      "require": "./entry-cjs.js",
       "default": "./entry-esm.js"
     }
   },
