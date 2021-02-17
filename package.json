@@ -1,6 +1,6 @@
 {
   "name": "freyja",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Functional interface to pass styles as props to components",
   "repository": "https://github.com/benoneal/freyja",
   "type": "module",
