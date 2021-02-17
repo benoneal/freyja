@@ -66,7 +66,7 @@ export const prefixValue = (property, value) => {
     return prefixCache[_key] = prefixed
   }
 
-  const alternate = ALTERNATE_VALUES[value].find(tryValue)
+  const alternate = ALTERNATE_VALUES[value] && ALTERNATE_VALUES[value].find(tryValue)
   if (alternate) return prefixCache[_key] = alternate
 
   return prefixCache[_key] = value
